@@ -244,7 +244,7 @@ def _hugo_serve_impl(ctx):
 
     if ctx.attr.quiet:
         hugo_args.append("--quiet")
-    if ctx.attr.quiet:
+    if ctx.attr.verbose:
         hugo_args.append("--verbose")
     if ctx.attr.disable_fast_render:
         hugo_args.append("--disableFastRender")
