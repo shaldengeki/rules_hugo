@@ -233,7 +233,7 @@ function exit_gracefully() {
 }
 
 """
-_SERVE_SCRIPT_TEMPLATE = """{hugo_bin} serve -s $DIR {args}"""
+_SERVE_SCRIPT_TEMPLATE = """{hugo_bin} server -s $DIR {args}"""
 
 def _hugo_serve_impl(ctx):
     """ This is a long running process used for development"""
@@ -248,8 +248,6 @@ def _hugo_serve_impl(ctx):
         hugo_args.append("--verbose")
     if ctx.attr.disable_fast_render:
         hugo_args.append("--disableFastRender")
-
-    hugo_args.append("server")
 
     executable_path = "./" + ctx.attr.hugo.files_to_run.executable.short_path
 
