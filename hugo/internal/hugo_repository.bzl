@@ -37,7 +37,7 @@ hugo_repository = repository_rule(
     _hugo_repository_impl,
     attrs = {
         "version": attr.string(
-            default = "0.55.5",
+            default = "0.127.0",
             doc = "The hugo version to use",
         ),
         "sha256": attr.string(
