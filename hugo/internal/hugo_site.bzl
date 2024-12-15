@@ -249,6 +249,8 @@ def _hugo_serve_impl(ctx):
     if ctx.attr.disable_fast_render:
         hugo_args.append("--disableFastRender")
 
+    hugo_args.append("server")
+
     executable_path = "./" + ctx.attr.hugo.files_to_run.executable.short_path
 
     runfiles = ctx.runfiles()
