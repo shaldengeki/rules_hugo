@@ -62,20 +62,10 @@ def _hugo_site_impl(ctx):
         )
 
         hugo_inputs.append(config_file)
-        source_dir = config_file.dirname
-        hugo_args += [
-            "--config", config_file.basename,
-        ]
     else:
         placeholder_file = ctx.actions.declare_file(".placeholder")
         ctx.actions.write(placeholder_file, "placeholder", is_executable=False)
         hugo_inputs.append(placeholder_file)
-        #  placeholder_file.dirname + "/config/_default/config.yaml",
-        source_dir = placeholder_file.dirname
-
-    hugo_args += [
-        "--source", source_dir,
-    ]
 
     # Copy all the files over
     for name, srcs in {
@@ -116,7 +106,7 @@ def _hugo_site_impl(ctx):
     # Prepare hugo command
     hugo_args += [
         "--destination",
-        ctx.label.name,
+        hugo_outputdir.path,
     ]
 
     if ctx.attr.quiet:
