@@ -38,9 +38,7 @@ def copy_to_dir(ctx, srcs, dirname):
             outs.append(i)
     return outs
 
-def _hugo_inputs(ctx):
-    hugo_inputs = []
-
+def _hugo_config(ctx):
     # Copy the config file into place
     config_dir = ctx.files.config_dir
 
@@ -53,12 +51,16 @@ def _hugo_inputs(ctx):
             command = 'cp -L "$1" "$2"',
             arguments = [ctx.file.config.path, config_file.path],
         )
-
-        hugo_inputs.append(config_file)
+        return config_file
     else:
         placeholder_file = ctx.actions.declare_file(".placeholder")
         ctx.actions.write(placeholder_file, "placeholder", is_executable=False)
-        hugo_inputs.append(placeholder_file)
+        return placeholder_file
+
+
+
+def _hugo_inputs(ctx, config_file):
+    hugo_inputs = [config_file]
 
     # Copy all the files over
     for name, srcs in {
@@ -97,8 +99,11 @@ def _hugo_inputs(ctx):
 
     return hugo_inputs
 
-def _hugo_args(ctx, hugo_outputdir):
-    hugo_args = []
+def _hugo_args(ctx, hugo_outputdir, hugo_config):
+    hugo_args = [
+        "--source",
+        hugo_config.dirname,
+    ]
 
     # Copy the theme
     if ctx.attr.theme:
@@ -131,8 +136,9 @@ def _hugo_site_impl(ctx):
     hugo_outputs = [hugo_outputdir]
     hugo = ctx.executable.hugo
 
-    hugo_inputs = _hugo_inputs(ctx)
-    hugo_args = _hugo_args(ctx, hugo_outputdir)
+    hugo_config = _hugo_config(ctx)
+    hugo_inputs = _hugo_inputs(ctx, hugo_config)
+    hugo_args = _hugo_args(ctx, hugo_outputdir, hugo_config)
 
     ctx.actions.run(
         mnemonic = "GoHugo",
