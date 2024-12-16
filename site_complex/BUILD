@@ -37,3 +37,9 @@ hugo_serve(
     name = "serve",
     dep = [":site_complex"],
 )
+
+sh_test(
+    name = "site_test",
+    srcs = ["site_test.sh"],
+    data = [":site_complex"],
+)
