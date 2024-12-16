@@ -2,7 +2,7 @@ workspace(name = "rules_hugo")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-load("@rules_hugo//hugo:rules.bzl", "github_hugo_theme", "hugo_repository")
+load("@rules_hugo//hugo:rules.bzl", "hugo_repository")
 
 hugo_repository(
     name = "hugo",
@@ -10,18 +10,10 @@ hugo_repository(
     version = "0.139.4",
 )
 
-github_hugo_theme(
-    name = "com_github_alex_shpak_hugo_book",
-    commit = "07048f7bf5097435a05c1e8b77241b0e478023c2",  # June 3, 2019
-    sha256 = "2897befb721e2bde54bb8acb43887d84c2855956f8efad5bd761628fe7fe5339",
-    owner = "alex-shpak",
-    repo = "hugo-book",
-)
-
 http_archive(
     name = "com_github_thegeeklab_hugo_geekdoc",
-    url = "https://github.com/thegeeklab/hugo-geekdoc/releases/download/v0.34.2/hugo-geekdoc.tar.gz",
-    sha256 = "7fdd57f7d4450325a778629021c0fff5531dc8475de6c4ec70ab07e9484d400e",
+    url = "https://github.com/thegeeklab/hugo-geekdoc/releases/download/v1.2.1/hugo-geekdoc.tar.gz",
+    sha256 = "5e6d26fc55d5d0eff16b5816c54f063c5682c689762c0a01fefbd968f2cfe008",
     build_file_content="""
 filegroup(
     name = "files",
