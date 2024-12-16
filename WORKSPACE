@@ -7,7 +7,7 @@ load("@rules_hugo//hugo:rules.bzl", "github_hugo_theme", "hugo_repository")
 hugo_repository(
     name = "hugo",
     extended = True,
-    version = "0.101.0",
+    version = "0.139.4",
 )
 
 github_hugo_theme(
