@@ -38,15 +38,8 @@ def copy_to_dir(ctx, srcs, dirname):
             outs.append(i)
     return outs
 
-def _hugo_site_impl(ctx):
-    hugo = ctx.executable.hugo
+def _hugo_inputs(ctx):
     hugo_inputs = []
-    hugo_outputdir = ctx.actions.declare_directory(ctx.label.name)
-    hugo_outputs = [hugo_outputdir]
-    hugo_args = []
-
-    if ctx.file.config == None and (ctx.files.config_dir == None or len(ctx.files.config_dir) == 0):
-        fail("You must provide either a config file or a config_dir")
 
     # Copy the config file into place
     config_dir = ctx.files.config_dir
@@ -84,7 +77,6 @@ def _hugo_site_impl(ctx):
     # Copy the theme
     if ctx.attr.theme:
         theme = ctx.attr.theme.hugo_theme
-        hugo_args += ["--theme", theme.name]
         for i in theme.files.to_list():
             path_list = i.short_path.split("/")
             if i.short_path.startswith("../"):
@@ -103,6 +95,16 @@ def _hugo_site_impl(ctx):
             )
             hugo_inputs.append(o)
 
+    return hugo_inputs
+
+def _hugo_args(ctx, hugo_outputdir):
+    hugo_args = []
+
+    # Copy the theme
+    if ctx.attr.theme:
+        theme = ctx.attr.theme.hugo_theme
+        hugo_args += ["--theme", theme.name]
+
     # Prepare hugo command
     hugo_args += [
         "--destination",
@@ -118,6 +120,19 @@ def _hugo_site_impl(ctx):
         hugo_args += ["--baseURL", ctx.attr.base_url]
     if ctx.attr.build_drafts:
         hugo_args += ["--buildDrafts"]
+
+    return hugo_args
+
+def _hugo_site_impl(ctx):
+    if ctx.file.config == None and (ctx.files.config_dir == None or len(ctx.files.config_dir) == 0):
+        fail("You must provide either a config file or a config_dir")
+
+    hugo_outputdir = ctx.actions.declare_directory(ctx.label.name)
+    hugo_outputs = [hugo_outputdir]
+    hugo = ctx.executable.hugo
+
+    hugo_inputs = _hugo_inputs(ctx)
+    hugo_args = _hugo_args(ctx, hugo_outputdir)
 
     ctx.actions.run(
         mnemonic = "GoHugo",
