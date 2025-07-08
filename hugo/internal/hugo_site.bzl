@@ -107,10 +107,10 @@ def _hugo_args(ctx, hugo_outputdir):
 
     # Prepare hugo command
     hugo_args += [
-        "--destination",
-        hugo_outputdir.path,
         "--source",
         ctx.label.package,
+        "--destination",
+        hugo_outputdir.path,
         # Hugo wants to modify the static input files for its own bookkeeping
         # but of course Bazel does not want input files to be changed. This breaks
         # in some sandboxes like RBE
