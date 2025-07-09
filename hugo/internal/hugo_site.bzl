@@ -105,12 +105,20 @@ def _hugo_args(ctx, hugo_outputdir):
         theme = ctx.attr.theme.hugo_theme
         hugo_args += ["--theme", theme.name]
 
+    # Prepare the --destination argument.
+    # By default, this comes in as a path relative to the execroot.
+    # Hugo (incorrectly) nests this under the directory we pass under --source;
+    # we don't want this, so we adjust what we pass to exit from the source dir.
+    subdirs = len(ctx.label.package.split("/"))
+    destination_path = "/".join([".."] * subdirs + [hugo_outputdir.path])
+
     # Prepare hugo command
     hugo_args += [
+        # Point Hugo to the right subdirectory containing the site sources.
         "--source",
         ctx.label.package,
         "--destination",
-        hugo_outputdir.path,
+        destination_path,
         # Hugo wants to modify the static input files for its own bookkeeping
         # but of course Bazel does not want input files to be changed. This breaks
         # in some sandboxes like RBE
