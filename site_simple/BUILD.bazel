@@ -12,6 +12,7 @@ hugo_site(
     name = "site_simple",
     config = "config.yaml",
     content = glob(["content/**"]),
+    # These are empty globs, which are disallowed by default in Bazel 9.
     # static = glob(["static/**"]),
     # layouts = glob(["layouts/**"]),
     theme = ":book",
