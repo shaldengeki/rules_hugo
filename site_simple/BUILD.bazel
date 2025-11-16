@@ -1,3 +1,4 @@
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("@build_stack_rules_hugo//hugo:rules.bzl", "hugo_site", "hugo_theme", "hugo_serve")
 
 hugo_theme(
@@ -11,8 +12,8 @@ hugo_site(
     name = "site_simple",
     config = "config.yaml",
     content = glob(["content/**"]),
-    static = glob(["static/**"]),
-    layouts = glob(["layouts/**"]),
+    # static = glob(["static/**"]),
+    # layouts = glob(["layouts/**"]),
     theme = ":book",
 )
 
