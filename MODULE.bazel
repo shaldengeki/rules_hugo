@@ -1,0 +1,5 @@
+module(
+    name = "build_stack_rules_hugo",
+)
+
+bazel_dep(name = "rules_shell", version = "0.6.1")
