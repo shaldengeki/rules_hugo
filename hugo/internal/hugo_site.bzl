@@ -228,7 +228,7 @@ hugo_site = rule(
         # Optionally set the base_url as a hugo argument
         "base_url": attr.string(),
         "theme": attr.label(
-            providers = ["hugo_theme"],
+            providers = [["hugo_theme"]],
         ),
         # Emit quietly
         "quiet": attr.bool(
