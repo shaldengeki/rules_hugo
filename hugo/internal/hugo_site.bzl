@@ -78,7 +78,7 @@ def _hugo_inputs(ctx):
 
     # Copy the theme
     if ctx.attr.theme:
-        theme = ctx.attr.theme
+        theme = ctx.attr.theme[HugoThemeInfo]
         for i in theme.files.to_list():
             path_list = i.short_path.split("/")
             if i.short_path.startswith("../"):
@@ -104,7 +104,7 @@ def _hugo_args(ctx, hugo_outputdir):
 
     # Copy the theme
     if ctx.attr.theme:
-        theme = ctx.attr.theme
+        theme = ctx.attr.theme[HugoThemeInfo]
         hugo_args += ["--theme", theme.name]
 
     # Prepare the --destination argument.
